@@ -4,6 +4,7 @@ import os
 import time
 from multiprocessing import Pool
 from typing import Dict, List, Tuple
+import concurrent.futures as pool
 
 from modules.vacancy import Vacancy
 
@@ -62,15 +63,49 @@ class CsvParser:
         files = os.listdir(dir_csv)
         args = list(map(lambda x: (dir_csv, x, filter_name), files))
 
-        pool = Pool(len(files))
+        mult_pool = Pool(len(files))
 
-        for e in sorted(pool.starmap(get__year_statistics, args), key=lambda x: x[0]):
+        for e in sorted(mult_pool.starmap(get__year_statistics, args), key=lambda x: x[0]):
             salaries[e[0]] = e[1]
             count[e[0]] = e[2]
             salaries_filtered[e[0]] = e[3]
             count_filtered[e[0]] = e[4]
 
         return salaries, count, salaries_filtered, count_filtered
+
+    # @staticmethod
+    # @profile
+    # def get_statictics(dir_csv: str, filter_name: str) -> Tuple[Dict[str, int], Dict[str, int], Dict[str, int], Dict[str, int]]:
+    #     """
+    #     Функция для получения данных о вакансиях для печати
+    #     :param dir_csv: Название деректиории с чанками
+    #     :param filter_name: Название вакансии для выборки
+    #     :return: Кортеж из словарей данных для печати
+    #     """
+    #     salaries = {}
+    #     count = {}
+    #     salaries_filtered = {}
+    #     count_filtered = {}
+    #
+    #     files = os.listdir(dir_csv)
+    #     args = list(map(lambda x: (dir_csv, x, filter_name), files))
+    #
+    #     with pool.ProcessPoolExecutor(max_workers=len(files)) as executer:
+    #         wait_complete = []
+    #
+    #         for arg in args:
+    #             future = executer.submit(get__year_statistics, *arg)
+    #             wait_complete.append(future)
+    #
+    #     result = sorted((map(lambda x: x.result(), pool.as_completed(wait_complete))), key=lambda x: x[0])
+    #
+    #     for arg in result:
+    #         salaries[arg[0]] = arg[1]
+    #         count[arg[0]] = arg[2]
+    #         salaries_filtered[arg[0]] = arg[3]
+    #         count_filtered[arg[0]] = arg[4]
+    #
+    #     return salaries, count, salaries_filtered, count_filtered
 
     def __parse_csv(self, file_name: str):
         """
