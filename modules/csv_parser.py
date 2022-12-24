@@ -8,29 +8,30 @@ class CsvParser:
     Класс для представления сущности парсера
     """
 
-    def __init__(self, file_name: str):
+    def __init__(self):
         """
         Инициализация парсера
-        :param file_name: Название файла для парсинга
         """
-        self.__file_name = file_name
         self.__year_data: Dict[str, List[List[str]]] = {}
         self.__title = []
 
-    def create_years_csv(self):
+    def create_years_csv(self, file_name: str, output_dir: str):
         """
         Метод создает csv файлы, разделенные по годам
+        :param file_name: Название файла для парсинга
+        :param output_dir: Название директории для чанков
         :return:
         """
-        self.__parse_csv()
-        self.__write_csv()
+        self.__parse_csv(file_name)
+        self.__write_csv(output_dir)
 
-    def __parse_csv(self):
+
+    def __parse_csv(self, file_name: str):
         """
         Метод для парсинга файла
         :return:
         """
-        with open(self.__file_name, 'r', encoding='utf-8-sig') as data_src:
+        with open(file_name, 'r', encoding='utf-8-sig') as data_src:
             reader = csv.reader(data_src, delimiter=',')
 
             is_title = True
@@ -62,7 +63,7 @@ class CsvParser:
         year_vacancies.append(row)
         self.__year_data[now_year] = year_vacancies
 
-    def __write_csv(self):
+    def __write_csv(self, output_dir: str):
         """
         Метод записывает данные в отдельные csv файлы по годам в папке years_csv
         :return:
@@ -71,7 +72,7 @@ class CsvParser:
             os.mkdir("years_csv")
 
         for key in self.__year_data.keys():
-            with open('years_csv/' + key + '.csv', 'w', encoding='utf-8-sig') as f:
+            with open(f"{output_dir}/{key}.csv", 'w', encoding='utf-8-sig') as f:
                 writer = csv.writer(f)
 
                 writer.writerow(self.__title)

@@ -10,6 +10,7 @@ class InputConnect:
         Метод инициализации объекта класса InputConnect
         """
         self.file_name: str = ''
+        self.output_dir: str = ''
 
     def read_console(self):
         """
@@ -17,3 +18,4 @@ class InputConnect:
         :return:
         """
         self.file_name = input('Введите название файла: ')
+        self.output_dir = input('Введите название директории для чанков: ')

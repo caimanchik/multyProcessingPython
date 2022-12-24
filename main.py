@@ -10,8 +10,8 @@ def main():
     connect = InputConnect()
     connect.read_console()
 
-    parser = CsvParser(connect.file_name)
-    parser.create_years_csv()
+    parser = CsvParser()
+    parser.create_years_csv(connect.file_name, connect.output_dir)
 
 if __name__ == '__main__':
     main()
