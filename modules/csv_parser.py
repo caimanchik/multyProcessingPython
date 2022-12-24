@@ -30,7 +30,7 @@ class CsvParser:
         Метод для парсинга файла
         :return:
         """
-        with open('src/' + self.__file_name, 'r', encoding='utf-8-sig') as data_src:
+        with open(self.__file_name, 'r', encoding='utf-8-sig') as data_src:
             reader = csv.reader(data_src, delimiter=',')
 
             is_title = True
